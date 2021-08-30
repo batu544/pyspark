@@ -9,10 +9,10 @@ class Pipeline:
         print("Running pipeline")
 
         ingest_process = ingest.Ingest(self.spark)
-        ingest_process.ingest_data()
+        permDF = ingest_process.ingest_data()
 
-        transform_proces = transform.Transform()
-        transform_proces.transform_data()
+        transform_proces = transform.Transform(self.spark)
+        transDF = transform_proces.transform_data(permDF)
 
         persist_process = persist.Persist()
         persist_process.persist_data()
