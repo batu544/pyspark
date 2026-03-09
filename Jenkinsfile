@@ -36,7 +36,7 @@ pipeline {
                 sh '''
                 # Must activate the venv again in each new 'sh' block
                 source venv/bin/activate
-                sh pytest tests/ --junitxml=test-results/results.xml
+                pytest tests/ --junitxml=test-results/results.xml
                 '''
             }
         }
