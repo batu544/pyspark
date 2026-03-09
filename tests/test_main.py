@@ -2,4 +2,4 @@ import pytest
 
 @pytest.fixture()
 def test_create_df():
-    pass
+    assert 1 == 1
