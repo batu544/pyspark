@@ -1,26 +1,18 @@
-import psycopg2
-from configparser import ConfigParser
+from pyspark.sql import SparkSession
 
-def config(filename='database.ini', section='postgresql') -> dict :
-    """
-    :param filename: contains database connection details
-    :param section: section details inside the conf ini file
-    :return: database dic
-    """
-    parser = ConfigParser()
-    parser.read(filename)
-
-    db = {}
-    if parser.has_section('postgresql'):
-        parms = parser.items(section)
-        for parm in parms:
-            db[parm[0]] = parm[1]
-    else:
-        raise Exception("No configuration found")
-    return db
+def spark_read():
+        spark = SparkSession.builder \
+                .appName('test') \
+                .getOrCreate()
+        return spark
 
 
-db = config()
-print(db)
+def create_df(spark):
+        df = spark.createDataFrame(data=[('Mike', 30), ('Sam', 20)], schema=['name', 'age'])
+        return df
 
-conn = psycopg2.connect(db)
+
+if __name__ == "__main__":
+        spark = spark_read()
+        dff = create_df(spark)
+        dff.show()
