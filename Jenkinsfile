@@ -16,19 +16,28 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            steps {
-                echo 'Installing required libraries...'
-                // Adjust this to your specific package manager (pip, npm, maven, etc.)
-                sh 'pip install -r requirements.txt'
-                sh 'pip install pytest'
-            }
-        }
+                    steps {
+                        echo 'Setting up virtual environment and installing libraries...'
+                        sh '''
+                        # Create a virtual environment named 'venv'
+                        python3 -m venv venv
+
+                        # Activate it and install requirements
+                        source venv/bin/activate
+                        pip install -r requirements.txt
+                        pip install pytest
+                        '''
+                    }
+                }
 
         stage('Run Automated Tests') {
             steps {
                 echo 'Executing test suite...'
-                // Runs the tests and generates an XML report for Jenkins to read
-                sh 'pytest tests/ --junitxml=test-results/results.xml'
+                sh '''
+                # Must activate the venv again in each new 'sh' block
+                source venv/bin/activate
+                sh pytest tests/ --junitxml=test-results/results.xml
+                '''
             }
         }
     }
